@@ -1,0 +1,4 @@
+make clean 
+make -j 120
+echo "Make finished"
+./idacre --id 0 --uri mongodb://192.168.1.88:27017 --db daq --logdir /home/data/tpc --reader --log-retention 6
