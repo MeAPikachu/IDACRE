@@ -66,7 +66,7 @@ V1725::V1725(std::shared_ptr<MongoLog>& log, std::shared_ptr<Options>& opts, int
 
   RawFile = (FILE**)calloc(1, sizeof(FILE*));
   std::stringstream raw_fmt;
-  raw_fmt << opts->GetString("strax_output_path") << "/wave.bin";
+  raw_fmt << opts->GetString("strax_output_path") << "/raw " << fBID << ".bin";
   std::string raw_new= raw_fmt.str();  
   *RawFile= fopen(raw_new.c_str(),"w");
 
@@ -77,7 +77,7 @@ V1725::V1725(std::shared_ptr<MongoLog>& log, std::shared_ptr<Options>& opts, int
   for (channel=0; channel<fNChannels; channel++)
   {
     std::stringstream wave_fmt ;
-    wave_fmt << opts->GetString("strax_output_path") << "/raw" << channel << ".txt";
+    wave_fmt << opts->GetString("strax_output_path") << "/raw"<< fBID << "_"<< channel << ".txt";
     std::string wave_new = wave_fmt.str();
     WaveFile[channel] = fopen(wave_new.c_str(),"w");
   }
@@ -312,12 +312,12 @@ int V1725::Read(std::unique_ptr<data_packet>& outptr){
 
   if (ret!=0)
   {
-    std::cout << "CAEN_DGTZ_ReadData Failed" << std::endl ;
+    std::cout << fBID  << "CAEN_DGTZ_ReadData Failed  : " << ret  << std::endl ;
   }
 
   if (BufferSize >0)
   {
-    std::cout << "Get some data !!" << std::endl;
+    std::cout << fBID <<"Get some data !!" << std::endl;
     ret=CAEN_DGTZ_GetDPPEvents(fBoardHandle,buffer,BufferSize/4,(void**)&Event[0],&NumEvents[0]);
 
     if (ret!=0){std::cout << "CAEN_DGTZ_GetDPPEvents Failed" << std::endl ;}
